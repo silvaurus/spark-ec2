@@ -51,7 +51,7 @@ else:
     raw_input = input
     xrange = range
 
-SPARK_EC2_VERSION = "1.6.2"
+SPARK_EC2_VERSION = "2.1.0"
 SPARK_EC2_DIR = os.path.dirname(os.path.realpath(__file__))
 
 VALID_SPARK_VERSIONS = set([
@@ -78,6 +78,7 @@ VALID_SPARK_VERSIONS = set([
     "1.6.0",
     "1.6.1",
     "1.6.2",
+    "2.1.0",
 ])
 
 SPARK_TACHYON_MAP = {
@@ -98,6 +99,7 @@ SPARK_TACHYON_MAP = {
     "1.6.0": "0.8.2",
     "1.6.1": "0.8.2",
     "1.6.2": "0.8.2",
+    "2.1.0": "0.8.2",
 }
 
 DEFAULT_SPARK_VERSION = SPARK_EC2_VERSION
@@ -203,7 +205,7 @@ def parse_args():
         "-m", "--master-instance-type", default="",
         help="Master instance type (leave empty for same as instance-type)")
     parser.add_option(
-        "-r", "--region", default="us-east-1",
+        "-r", "--region", default="us-west-2",
         help="EC2 region used to launch instances in, or to find them in (default: %default)")
     parser.add_option(
         "-z", "--zone", default="",
@@ -238,7 +240,7 @@ def parse_args():
              "the directory is not created and its contents are copied directly into /. " +
              "(default: %default).")
     parser.add_option(
-        "--hadoop-major-version", default="1",
+        "--hadoop-major-version", default="2",
         help="Major version of Hadoop. Valid options are 1 (Hadoop 1.0.4), 2 (CDH 4.2.0), yarn " +
              "(Hadoop 2.4.0) (default: %default)")
     parser.add_option(
@@ -368,6 +370,8 @@ def get_or_make_group(conn, name, vpc_id):
 
 
 def get_validate_spark_version(version, repo):
+    print(version)
+    print(repo)
     if "." in version:
         version = version.replace("v", "")
         if version not in VALID_SPARK_VERSIONS:
@@ -1314,6 +1318,7 @@ def real_main():
         print("ebs-vol-num cannot be greater than 8", file=stderr)
         sys.exit(1)
 
+    print("Henry testpoint 1")
     # Prevent breaking ami_prefix (/, .git and startswith checks)
     # Prevent forks with non spark-ec2 names for now.
     if opts.spark_ec2_git_repo.endswith("/") or \
@@ -1324,6 +1329,8 @@ def real_main():
               "Furthermore, we currently only support forks named spark-ec2.", file=stderr)
         sys.exit(1)
 
+    print("Henry testpoint 2")
+
     if not (opts.deploy_root_dir is None or
             (os.path.isabs(opts.deploy_root_dir) and
              os.path.isdir(opts.deploy_root_dir) and
@@ -1331,6 +1338,8 @@ def real_main():
         print("--deploy-root-dir must be an absolute path to a directory that exists "
               "on the local file system", file=stderr)
         sys.exit(1)
+
+    print("Henry testpoint 3")
 
     try:
         if opts.profile is None:
@@ -1345,20 +1354,29 @@ def real_main():
     if opts.zone == "":
         opts.zone = random.choice(conn.get_all_zones()).name
 
+    print("Henry testpoint 4")
+
+
     if action == "launch":
         if opts.slaves <= 0:
             print("ERROR: You have to start at least 1 slave", file=sys.stderr)
             sys.exit(1)
+            print("Henry testpoint 5")
+
         if opts.resume:
             (master_nodes, slave_nodes) = get_existing_cluster(conn, opts, cluster_name)
         else:
             (master_nodes, slave_nodes) = launch_cluster(conn, opts, cluster_name)
+            print("Henry testpoint 6")
+
         wait_for_cluster_state(
             conn=conn,
             opts=opts,
             cluster_instances=(master_nodes + slave_nodes),
             cluster_state='ssh-ready'
         )
+
+        print("Henry testpoint 7")
         setup_cluster(conn, master_nodes, slave_nodes, opts, True)
 
     elif action == "destroy":
