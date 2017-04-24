@@ -51,7 +51,7 @@ else:
     raw_input = input
     xrange = range
 
-SPARK_EC2_VERSION = "2.0.0"
+SPARK_EC2_VERSION = "2.1.0"
 SPARK_EC2_DIR = os.path.dirname(os.path.realpath(__file__))
 
 VALID_SPARK_VERSIONS = set([
@@ -109,7 +109,7 @@ DEFAULT_SPARK_VERSION = SPARK_EC2_VERSION
 DEFAULT_SPARK_GITHUB_REPO = "https://github.com/apache/spark"
 
 # Default location to get the spark-ec2 scripts (and ami-list) from
-DEFAULT_SPARK_EC2_GITHUB_REPO = "https://github.com/amplab/spark-ec2"
+DEFAULT_SPARK_EC2_GITHUB_REPO = "https://github.com/silvaurus/spark-ec2"
 DEFAULT_SPARK_EC2_BRANCH = "branch-2.0"
 
 
@@ -845,7 +845,7 @@ def setup_cluster(conn, master_nodes, slave_nodes, opts, deploy_ssh_key):
             ssh_write(slave_address, opts, ['tar', 'x'], dot_ssh_tar)
 
     modules = ['spark', 'ephemeral-hdfs', 'persistent-hdfs',
-               'mapreduce', 'spark-standalone', 'tachyon', 'rstudio']
+               'spark-standalone', 'tachyon', 'rstudio']
 
     if opts.hadoop_major_version == "1":
         modules = list(filter(lambda x: x != "mapreduce", modules))
