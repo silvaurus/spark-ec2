@@ -67,8 +67,8 @@ function setup_ebs_volume {
     if ! blkid $device; then
       mkdir $mount_point
       yum install -q -y xfsprogs
-      if mkfs.xfs -q $device; then
-        mount -o $XFS_MOUNT_OPTS $device $mount_point
+      if mkfs.ext4 $device; then
+        mount $device $mount_point
         chmod -R a+w $mount_point
       else
         # mkfs.xfs is not installed on this machine or has failed;
@@ -88,20 +88,20 @@ function setup_ebs_volume {
 }
 
 # Format and mount EBS volume (/dev/sd[s, t, u, v, w, x, y, z]) as /vol[x] if the device exists
-#setup_ebs_volume /dev/sds /vol0
-#setup_ebs_volume /dev/sdt /vol1
-#setup_ebs_volume /dev/sdu /vol2
-#setup_ebs_volume /dev/sdv /vol3
-#setup_ebs_volume /dev/sdw /vol4
-#setup_ebs_volume /dev/sdx /vol5
-#setup_ebs_volume /dev/sdy /vol6
-#setup_ebs_volume /dev/sdz /vol7
+setup_ebs_volume /dev/sds /vol0
+setup_ebs_volume /dev/sdt /vol1
+setup_ebs_volume /dev/sdu /vol2
+setup_ebs_volume /dev/sdv /vol3
+setup_ebs_volume /dev/sdw /vol4
+setup_ebs_volume /dev/sdx /vol5
+setup_ebs_volume /dev/sdy /vol6
+setup_ebs_volume /dev/sdz /vol7
 
 # Alias vol to vol3 for backward compatibility: the old spark-ec2 script supports only attaching
 # one EBS volume at /dev/sdv.
-#if [[ -e /vol3 && ! -e /vol ]]; then
-#  ln -s /vol3 /vol
-#fi
+if [[ -e /vol3 && ! -e /vol ]]; then
+  ln -s /vol3 /vol
+fi
 
 # Make data dirs writable by non-root users, such as CDH's hadoop user
 chmod -R a+w /mnt*
