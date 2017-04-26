@@ -1,4 +1,4 @@
-!/bin/bash
+#!/bin/bash
 
 cd /root/
 git clone https://github.com/intel-hadoop/HiBench.git

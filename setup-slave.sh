@@ -43,15 +43,15 @@ if [[ $instance_type == r3* || $instance_type == i2* || $instance_type == hi1* ]
     # To turn TRIM support on, uncomment the following line.
     #echo '/dev/sdc /mnt2  ext4  defaults,noatime,discard 0 0' >> /etc/fstab
     if [[ $instance_type == "r3.8xlarge" ]]; then
-      mkfs.ext4 -E lazy_itable_init=0,lazy_journal_init=0 /dev/sdc      
+      mkfs.ext4 -E lazy_itable_init=0,lazy_journal_init=0 /dev/sdc
       mount -o $EXT4_MOUNT_OPTS /dev/sdc /mnt2
     fi
     # To turn TRIM support on, uncomment the following line.
     #echo '/dev/sdf /mnt2  ext4  defaults,noatime,discard 0 0' >> /etc/fstab
     if [[ $instance_type == "hi1.4xlarge" ]]; then
-      mkfs.ext4 -E lazy_itable_init=0,lazy_journal_init=0 /dev/sdf      
+      mkfs.ext4 -E lazy_itable_init=0,lazy_journal_init=0 /dev/sdf
       mount -o $EXT4_MOUNT_OPTS /dev/sdf /mnt2
-    fi    
+    fi
   fi
 fi
 
@@ -88,20 +88,20 @@ function setup_ebs_volume {
 }
 
 # Format and mount EBS volume (/dev/sd[s, t, u, v, w, x, y, z]) as /vol[x] if the device exists
-setup_ebs_volume /dev/sds /vol0
-setup_ebs_volume /dev/sdt /vol1
-setup_ebs_volume /dev/sdu /vol2
-setup_ebs_volume /dev/sdv /vol3
-setup_ebs_volume /dev/sdw /vol4
-setup_ebs_volume /dev/sdx /vol5
-setup_ebs_volume /dev/sdy /vol6
-setup_ebs_volume /dev/sdz /vol7
+#setup_ebs_volume /dev/sds /vol0
+#setup_ebs_volume /dev/sdt /vol1
+#setup_ebs_volume /dev/sdu /vol2
+#setup_ebs_volume /dev/sdv /vol3
+#setup_ebs_volume /dev/sdw /vol4
+#setup_ebs_volume /dev/sdx /vol5
+#setup_ebs_volume /dev/sdy /vol6
+#setup_ebs_volume /dev/sdz /vol7
 
 # Alias vol to vol3 for backward compatibility: the old spark-ec2 script supports only attaching
 # one EBS volume at /dev/sdv.
-if [[ -e /vol3 && ! -e /vol ]]; then
-  ln -s /vol3 /vol
-fi
+#if [[ -e /vol3 && ! -e /vol ]]; then
+#  ln -s /vol3 /vol
+#fi
 
 # Make data dirs writable by non-root users, such as CDH's hadoop user
 chmod -R a+w /mnt*
