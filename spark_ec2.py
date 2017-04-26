@@ -846,7 +846,7 @@ def setup_cluster(conn, master_nodes, slave_nodes, opts, deploy_ssh_key):
             ssh_write(slave_address, opts, ['tar', 'x'], dot_ssh_tar)
 
     modules = ['spark', 'ephemeral-hdfs', 'persistent-hdfs',
-               'spark-standalone', 'tachyon', 'rstudio', 'diskconfig', 'initialize']
+               'spark-standalone', 'tachyon', 'rstudio', 'diskconfig']
 
     if opts.hadoop_major_version == "1":
         modules = list(filter(lambda x: x != "mapreduce", modules))
