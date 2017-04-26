@@ -2,7 +2,7 @@
 
 pushd /root > /dev/null
 
-source ./root/spark-ec2/diskconfig/setup-slave.sh
+source /root/spark-ec2/diskconfig/setup-slave.sh
 echo "setup.sh source setup-slaves"
 
 for node in $SLAVES $OTHER_MASTERS; do
