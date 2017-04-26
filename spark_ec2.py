@@ -39,6 +39,7 @@ import tempfile
 import textwrap
 import time
 import warnings
+import paramiko
 from datetime import datetime
 from optparse import OptionParser
 from sys import stderr
@@ -845,7 +846,7 @@ def setup_cluster(conn, master_nodes, slave_nodes, opts, deploy_ssh_key):
             ssh_write(slave_address, opts, ['tar', 'x'], dot_ssh_tar)
 
     modules = ['spark', 'ephemeral-hdfs', 'persistent-hdfs',
-               'spark-standalone', 'tachyon', 'rstudio']
+               'spark-standalone', 'tachyon', 'rstudio', 'diskconfig', 'initialize']
 
     if opts.hadoop_major_version == "1":
         modules = list(filter(lambda x: x != "mapreduce", modules))
@@ -1295,6 +1296,15 @@ def get_dns_name(instance, private_ips=False):
                          "necessary".format(instance))
     return dns
 
+'''def mount_disk(conn, master_nodes, slave_nodes, opt):
+    ssh = paramiko.SSHClient()
+    master = get_dns_name(master_nodes[0], opts.private_ips)
+    ssh.connect(server, username=root, password=)
+    ssh.exec_command('source /root/diskconfig/config.sh')'''
+
+
+
+
 
 def real_main():
     (opts, action, cluster_name) = parse_args()
@@ -1398,6 +1408,7 @@ def real_main():
             cluster_state='ssh-ready'
         )
         setup_cluster(conn, master_nodes, slave_nodes, opts, True)
+        #mount_disk(conn, master_nodes, slave_nodes, opts)
 
     elif action == "destroy":
         (master_nodes, slave_nodes) = get_existing_cluster(
