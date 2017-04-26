@@ -255,7 +255,7 @@ def parse_args():
         help="Resume installation on a previously launched cluster " +
              "(for debugging)")
     parser.add_option(
-        "--ebs-vol-size", metavar="SIZE", type="int", default=0,
+        "--ebs-vol-size", metavar="SIZE", type="int", default=50,
         help="Size (in GB) of each EBS volume.")
     parser.add_option(
         "--ebs-vol-type", default="standard",
@@ -540,7 +540,7 @@ def launch_cluster(conn, opts, cluster_name):
             master_group.authorize(ip_protocol='udp', from_port=0, to_port=65535,
                                    src_group=slave_group)
         master_group.authorize('tcp', 22, 22, authorized_address)
-        master_group.authorize('tcp', 8080, 8081, authorized_address)
+        master_group.authorize('tcp', 8080, 8085, authorized_address)
         master_group.authorize('tcp', 18080, 18080, authorized_address)
         master_group.authorize('tcp', 19999, 19999, authorized_address)
         master_group.authorize('tcp', 50030, 50030, authorized_address)
@@ -578,7 +578,7 @@ def launch_cluster(conn, opts, cluster_name):
             slave_group.authorize(ip_protocol='udp', from_port=0, to_port=65535,
                                   src_group=slave_group)
         slave_group.authorize('tcp', 22, 22, authorized_address)
-        slave_group.authorize('tcp', 8080, 8081, authorized_address)
+        slave_group.authorize('tcp', 8080, 8085, authorized_address)
         slave_group.authorize('tcp', 50060, 50060, authorized_address)
         slave_group.authorize('tcp', 50075, 50075, authorized_address)
         slave_group.authorize('tcp', 60060, 60060, authorized_address)
