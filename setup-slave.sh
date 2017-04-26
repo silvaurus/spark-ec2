@@ -70,6 +70,7 @@ function setup_ebs_volume {
       yum install -q -y xfsprogs
       if mkfs.ext4 $device; then
         mount $device $mount_point
+        echo "Mount Success"
         chmod -R a+w $mount_point
       else
         # mkfs.xfs is not installed on this machine or has failed;
@@ -89,7 +90,7 @@ function setup_ebs_volume {
 }
 
 # Format and mount EBS volume (/dev/sd[s, t, u, v, w, x, y, z]) as /vol[x] if the device exists
-#setup_ebs_volume /dev/sds /vol0
+setup_ebs_volume /dev/sds /vol0
 #setup_ebs_volume /dev/sdt /vol1
 #setup_ebs_volume /dev/sdu /vol2
 #setup_ebs_volume /dev/sdv /vol3
